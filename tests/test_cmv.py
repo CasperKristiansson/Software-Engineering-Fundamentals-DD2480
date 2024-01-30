@@ -6,20 +6,13 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from src.cmv import CMV
+from src.parse import read_input_to_dict
 
 class TestCMV(unittest.TestCase):
 
     # Run before each test
     def instantiate_object(self, filepath):
-        d = {}
-
-        with open(filepath, "r") as file:
-            for line in file:
-                key, value = line.strip().split("=")
-                d[key] = value
-        
-        file.close()
-
+        d = read_input_to_dict(filepath)
         return CMV(d)
 
     # Placeholder functions - Most likely need more than one test per function
