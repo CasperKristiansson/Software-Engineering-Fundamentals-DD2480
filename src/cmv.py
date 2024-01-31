@@ -1,3 +1,4 @@
+
 import math
 
 def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
@@ -55,7 +56,32 @@ class CMV:
         pass
 
     def condition3(self):
-        pass
+        """
+        Determine whether there exists at least one set of three consecutive data points
+        that are the vertices of a triangle with an area greater than the input parameter 
+        AREA1.
+
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - True if there exist a set of three consecutive data points with an area greater than AREA1
+        - False otherwise
+        """
+
+        if len(self.POINTS) < 3:
+            return False
+        
+        for i in range(len(self.POINTS)-2):
+            (x1,y1) = self.POINTS[i]
+            (x2,y2) = self.POINTS[i+1]
+            (x3,y3) = self.POINTS[i+2]
+            area = 0.5 * abs(x1*(y2-y3) + x2*(y3-y1) + x3*(y1-y2))
+            
+            if area > self.AREA1:
+                return True
+        return False
+
 
     def condition4(self):
         """Check if `Q_PTS` sequential points lie in more quadrants than `QUADS`.
