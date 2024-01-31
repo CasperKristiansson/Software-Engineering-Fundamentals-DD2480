@@ -90,7 +90,28 @@ class CMV:
 
 
     def condition7(self):
-        pass
+        """
+        Determine whether there exists at least one set of data 
+        points, separated by exactly K_PTS points, with a distance 
+        greater than LENGTH1.
+
+        Parameters:
+        - self: the CMV object
+        
+        Returns:
+        - True if the is a distance greater than LENGTH1
+        - False otherwise
+        """
+        if self.NUMPOINTS < 3:
+            return False
+        for i in range(self.NUMPOINTS-self.K_PTS - 1):
+            (x1,y1) = self.POINTS[i]
+            (x2,y2) = self.POINTS[i + self.K_PTS + 1]
+
+            dist = math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+            if dist > self.LENGTH1:
+                return True
+        return False
 
     def condition8(self):
         pass
