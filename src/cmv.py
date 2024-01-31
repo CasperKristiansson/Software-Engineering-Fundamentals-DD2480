@@ -1,5 +1,25 @@
 import math
 
+def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
+    """Check what quadrant a point lies in, favouring lower numbered quadrants. Utility funciton.
+
+    :param point: The point to check quadrant for.
+    :type point: tuple[float, float] | list[float]
+
+    :return: Returns the quadrant encoded as an integer in the range [1, 4]
+    :rtype: int
+    """
+    x, y = point
+
+    if x >= 0 and y >= 0:
+        return 1
+    elif x <= 0 and y >= 0:
+        return 2
+    elif x <= 0 and y <= 0:
+        return 3
+    else:
+        return 4
+
 class CMV:
     def __init__(self, d):
         for k,v in d.items():
@@ -38,7 +58,24 @@ class CMV:
         pass
 
     def condition4(self):
-        pass
+        """Check if `Q_PTS` sequential points lie in more quadrants than `QUADS`.
+
+        Checks the condition by mapping each point of a sliding window to their
+        respective quadrants and creating a set of these. The length of the set
+        is compared to `QUADS` field to determine if the condition is upheld.
+
+        Defaults to false if `Q_PTS < QUADS || NUMPOINTS < QUADS`.
+        """
+
+        if self.Q_PTS < self.QUADS or self.NUMPOINTS < self.QUADS:
+            return False
+        
+        for i in range(0, self.NUMPOINTS - self.Q_PTS):
+            window = self.POINTS[i : i + self.Q_PTS]
+            quad_set = set(map(_determine_quadrant, window))
+            if len(quad_set) > self.QUADS:
+                return True
+        return False
 
     def condition5(self):
         pass

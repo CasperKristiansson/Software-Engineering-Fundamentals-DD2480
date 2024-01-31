@@ -5,7 +5,7 @@ import os
 # Add root folder to current path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from src.cmv import CMV
+from src.cmv import CMV, _determine_quadrant
 from src.parse import read_input_to_dict
 
 class TestCMV(unittest.TestCase):
@@ -22,6 +22,49 @@ class TestCMV(unittest.TestCase):
         """
         d = read_input_to_dict(filepath)
         return CMV(d)
+
+    def test_determine_quadrant(self):
+        self.assertIs(_determine_quadrant((0, 0)), 1)
+        self.assertIs(_determine_quadrant((0, 1)), 1)
+        self.assertIs(_determine_quadrant((1, 0)), 1)
+        self.assertIs(_determine_quadrant((1, 1)), 1)
+        self.assertIs(_determine_quadrant((1.11, 1.1414)), 1)
+
+        self.assertIs(_determine_quadrant((-1, 0)), 2)
+        self.assertIs(_determine_quadrant((-1, 1)), 2)
+        self.assertIs(_determine_quadrant((-1, 1)), 2)
+        self.assertIs(_determine_quadrant((-0.1, 2.4)), 2)
+
+        self.assertIs(_determine_quadrant((0, -1)), 3)
+        self.assertIs(_determine_quadrant((-1, -1)), 3)
+        self.assertIs(_determine_quadrant((-6.3, -3.4)), 3)
+
+        self.assertIs(_determine_quadrant((1, -1)), 4)
+        self.assertIs(_determine_quadrant((0.34, -75)), 4)
+
+
+    def test_condition4(self):
+        # Expected data for true
+        filename = "cmv_cond4_true.in"
+        filepath = os.path.join(os.path.dirname(__file__), "data", filename)
+        cmv = self.instantiate_object(filepath)
+        self.assertTrue(cmv.condition4())
+
+        # QUADS=3 but all points in Q1
+        filename = "cmv_cond4_false.in"
+        filepath = os.path.join(os.path.dirname(__file__), "data", filename)
+        cmv = self.instantiate_object(filepath)
+        self.assertFalse(cmv.condition4())
+
+        # Two points cannot fulfill three quadrants
+        cmv.Q_PTS = 2
+        cmv.QUADS = 3
+        self.assertFalse(cmv.condition4())
+
+        # Two points cannot fulfill three quadrants
+        cmv.Q_PTS = 5
+        cmv.NUMPOINTS = 2
+        self.assertFalse(cmv.condition4())
     
 
     def test_condition6(self):
@@ -101,5 +144,4 @@ class TestCMV(unittest.TestCase):
         cmv.K_PTS = 1
         cmv.LENGTH1 = 11.313708498984761
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
-
 
