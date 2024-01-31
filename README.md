@@ -7,6 +7,13 @@ The unit testing is based on the Python built in `unittest` framework (https://d
 To run all tests in a file:
 - `python -m unittest <path to testfile>`
 
+## CI/CD
+
+We are utilizing GitHub Actions for CI/CD. The workflow is defined in `.github/workflows/`. We have three different kinds of GitHub Actions workflows:
+
+- `generate-documentation.yml` - This workflow is triggered when a merge to the `main` branch is made. It generates the documentation alongside a PDF and creates a new release.. The documentation is added to the release along with with a text describing the changes made since the last release.
+- `python-tests.yml` - This workflow is triggered on all `pull requests`. It runs the unit tests in the directory `tests/`.
+- `generate-website.yml` - This workflow is triggered after the workflow `generate-documentation.yml` is completed. It than generates the documentation alongside a HTML webpage. The webpage is than pushed to github pages.
 
 ## Documentation
 Adding New Modules to Sphinx Documentation
