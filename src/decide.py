@@ -9,16 +9,16 @@ from src.fuv import generate_fuv
 from src.pum import create_pum
 from src.parse import read_input_to_dict
 
+
 def instantiate_input(file_path):
     """
-        Initiate all input variables before calling decide method
-        
-        Parameters:
-        - file_path: path to file containing input data
+    Initiate all input variables before calling the decide method.
 
-        Returns:
-        - True: if decide returns True
-        - False: otherwise
+    :param file_path: Path to file containing input data.
+    :type file_path: str
+
+    :return: Returns True if the decide method returns True, False otherwise.
+    :rtype: bool
     """
     d = read_input_to_dict(file_path)
     cmv = CMV(d)
@@ -27,35 +27,37 @@ def instantiate_input(file_path):
 
     return decide(cmv, pum, fuv)
 
+
 def print_matrix(mtx):
     """
-        Helper function to print a matrix in a clear and visible way
+    Helper function to print a matrix in a clear and visible way.
 
-        Parameters:
-        - mtx: The matrix to print
+    :param mtx: The matrix to print.
+    :type mtx: list[list[int]] | list[list[float]]
 
-        Returns:
-        - None
+    :return: None
+    :rtype: NoneType
     """
-
     for row in mtx:
         print(row)
 
+
 def decide(cmv, pum, fuv):
     """
-        This is the decide function that determines if a launch is required, 
-        based on the Final Unlocking Vector (FUV)
+    This is the decide function that determines if a launch is required, based on the Final Unlocking Vector (FUV).
 
-        Parameters:
-        - cmv: The CMV object
-        - pum: The PUM 
-        - fuv: The FUV
+    :param cmv: The CMV object.
+    :type cmv: object
 
-        Returns:
-        - True if Launch is required
-        - False otherwise
+    :param pum: The Preliminary Unlocking Matrix (PUM).
+    :type pum: list[list[bool]]
+
+    :param fuv: The Final Unlocking Vector.
+    :type fuv: list[bool]
+
+    :return: Returns True if Launch is required, False otherwise.
+    :rtype: bool
     """
-
     LAUNCH = all(fuv)
     if LAUNCH:
         print('YES')
@@ -66,7 +68,7 @@ def decide(cmv, pum, fuv):
         # print_matrix(pum)
         # print()
         # print(f'The fuv is {fuv}')
-        
+
     else:
         print('NO')
         # print()
@@ -76,7 +78,7 @@ def decide(cmv, pum, fuv):
         # print_matrix(pum)
         # print()
         # print(f'The fuv is {fuv}')
-        
+
     return LAUNCH
 
 # if __name__ == '__main__':

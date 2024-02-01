@@ -1,17 +1,17 @@
-from argparse import ArgumentError
 import ast
 
-PI = 3.1415926535 
+PI = 3.1415926535
+
 
 def read_input_from_file(file_path):
     """
     Reads input data from a file and returns a list of lines.
 
-    Parameters:
-    - file_path (str): The path to the input file.
+    :param file_path: The path to the input file.
+    :type file_path: str
 
-    Returns:
-    - input_lines (list): List of lines read from the input file.
+    :return: List of lines read from the input file.
+    :rtype: list[str]
     """
     with open(file_path, 'r') as file:
         input_data = file.read()
@@ -19,24 +19,24 @@ def read_input_from_file(file_path):
     file.close()
     return input_lines
 
+
 def validate_and_parse_input(input_lines):
     """
-    Parses input lines into a dictionary and uses help function to validate criteria, following specified constraints.
+    Parses input lines into a dictionary and uses a help function to validate criteria, following specified constraints.
 
-    Parameters:
-    - input_lines (list): List of lines from the input file.
+    :param input_lines: List of lines from the input file.
+    :type input_lines: list[str]
 
-    Returns:
-    - d (dictionary): Parsed dictionary containing parameter-value pairs.
+    :return: Parsed dictionary containing parameter-value pairs.
+    :rtype: dict
     """
-
     exp_inputs = [
         'NUMPOINTS', 'POINTS', 'LENGTH1', 'RADIUS1', 'EPSILON', 'AREA1', 'Q_PTS',
         'QUADS', 'DIST', 'N_PTS', 'K_PTS', 'A_PTS', 'B_PTS', 'C_PTS', 'D_PTS',
         'E_PTS', 'F_PTS', 'G_PTS', 'LENGTH2', 'RADIUS2', 'AREA2', 'LCM', 'PUV'
     ]
     d = {}
-    
+
     try:
         for key, value in zip(exp_inputs, input_lines):
             value_str = value.split("=")[1]
@@ -45,19 +45,19 @@ def validate_and_parse_input(input_lines):
     except (ValueError, SyntaxError):
         raise Exception(f'Invalid value for {key}')
 
-
     validate(d)
+
     return d
+
 
 def validate(d):
     """
     Performs the validation on the parsed dictionary based on predefined constraints.
 
-    Parameters:
-    - d (dictionary): Parsed dictionary containing parameter-value pairs.
+    :param d: Parsed dictionary containing parameter-value pairs.
+    :type d: dict
 
-    Raises:
-    - ArgumentError: If any of the validation constraints is not satisfied.
+    :raises Invalid value for {key}: If any of the validation constraints is not satisfied.
     """
     constraints =[
         ("NUMPOINTS", lambda x: x == len(d['POINTS']) and 2 <= x <= 100),
@@ -88,20 +88,20 @@ def validate(d):
         if not lambda_func(d[key]):
             raise Exception(f'Invalid value for {key}')
 
+
 def read_input_to_dict(file_path='template.in'):
     """
-    Combines the above functions to read and validate input data from a file,
-    returning the parsed dictionary.
+    Combines the above functions to read and validate input data from a file, returning the parsed dictionary.
 
-    Parameters:
-    - file_path (str): The path to the input file.
+    :param file_path: The path to the input file.
+    :type file_path: str
 
-    Returns:
-    - d (dictionary): Parsed dictionary containing validated parameter-value pairs.
+    :return: Parsed dictionary containing validated parameter-value pairs.
+    :rtype: dict
     """
     input_lines = read_input_from_file(file_path)
     d = validate_and_parse_input(input_lines)
-    
+
     return d
 
 

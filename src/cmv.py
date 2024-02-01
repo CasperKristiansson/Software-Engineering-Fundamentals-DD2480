@@ -3,8 +3,9 @@ import math
 import src.utils as utils
 from src.parse import PI
 
+
 def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
-    """Check what quadrant a point lies in, favouring lower numbered quadrants. Utility funciton.
+    """Check what quadrant a point lies in, favouring lower numbered quadrants. 
 
     :param point: The point to check quadrant for.
     :type point: tuple[float, float] | list[float]
@@ -23,8 +24,9 @@ def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
     else:
         return 4
 
+
 def _check_tripoint_radius(
-        a: tuple[float, float] | list[float],
+a: tuple[float, float] | list[float],
         b: tuple[float, float] | list[float],
         c: tuple[float, float] | list[float],
         r: float) -> bool:
@@ -58,7 +60,7 @@ def _check_tripoint_radius(
                 math.dist(centroid, b) <= r and \
                 math.dist(centroid, c) <= r:
             return True
-    
+
     # Final centroid, between all three points
     centroid = (a[0] + b[0] + c[0]) / 3, \
                 (a[1] + b[1] + c[1]) / 3
@@ -73,7 +75,7 @@ class CMV:
         for k,v in d.items():
             setattr(self, k, v)
         self.CMV_VECTOR = self.construct_vector()
-    
+
     def construct_vector(self):
         return [
             self.condition0(),
@@ -92,16 +94,16 @@ class CMV:
             self.condition13(),
             self.condition14(),
         ]
-    
+
     def condition0(self):
         """
-        Check if any consecutive points are further apart than LENGTH1
+        Check if any consecutive points are further apart than LENGTH1.
 
-        Parameters:
-        - POINTS (list): List of points (x,y) that make up the curve.
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - bool: True if any consecutive points are further apart than LENGTH1, False otherwise.
+        :return: Returns True if any consecutive points are further apart than LENGTH1, False otherwise.
+        :rtype: bool
         """
         for i in range(len(self.POINTS)-1):
             first_point = self.POINTS[i]
@@ -113,13 +115,13 @@ class CMV:
 
     def condition1(self):
         """
-        Checks if three sequential points if any is outside the radius.
+        Checks if three sequential points are outside the radius. 
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - bool: True if any of the three sequential points is outside the radius, False otherwise.
+        :return: Returns True if any of the three sequential points is outside the radius, False otherwise.
+        :rtype: bool
         """
         for i in range(len(self.POINTS) - 2):
             first_point = self.POINTS[i]
@@ -128,16 +130,17 @@ class CMV:
             if not _check_tripoint_radius(first_point, second_point, third_point, self.RADIUS1):
                 return True
         return False
-    
+
     def condition2(self):
         """
-        Determine whether there exists at least one set of three consecutive data points that are the vertices of a triangle
+        Determine whether there exists at least one set of three consecutive data points that are the
+        vertices of a triangle. 
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if there exist a set of three consecutive data points that are the vertices of a triangle
+        :return: Returns True if there exists at least one set of three consecutive data points that are the vertices of a triangle.
+        :rtype: bool
         """
         for i in range(len(self.POINTS)-2):
             first_point = self.POINTS[i]
@@ -156,22 +159,19 @@ class CMV:
                 if angle < (PI - self.EPSILON) or angle > (PI + self.EPSILON):
                     return True
                 else:
-                    return False 
+                    return False
 
     def condition3(self):
         """
-        Determine whether there exists at least one set of three consecutive data points
-        that are the vertices of a triangle with an area greater than the input parameter 
-        AREA1.
+        Determine whether there exists at least one set of three consecutive data points that are
+        the vertices of a triangle with an area greater than the input parameter AREA1. 
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if there exist a set of three consecutive data points with an area greater than AREA1
-        - False otherwise
+        :return: Returns True if there exists a set of three consecutive data points with an area greater than AREA1, False otherwise.
+        :rtype: bool
         """
-
         if len(self.POINTS) < 3:
             return False
 
@@ -182,20 +182,22 @@ class CMV:
                 return True
         return False
 
-
     def condition4(self):
-        """Check if `Q_PTS` sequential points lie in more quadrants than `QUADS`.
-
-        Checks the condition by mapping each point of a sliding window to their
-        respective quadrants and creating a set of these. The length of the set
-        is compared to `QUADS` field to determine if the condition is upheld.
-
-        Defaults to false if `Q_PTS < QUADS || NUMPOINTS < QUADS`.
         """
+        Check if `Q_PTS` sequential points lie in more quadrants than `QUADS`. 
+        Checks the condition by mapping each point of a sliding window to their respective quadrants
+        and creating a set of these. The length of the set is compared to `QUADS` field to determine
+        if the condition is upheld. Defaults to false if `Q_PTS < QUADS || NUMPOINTS < QUADS`.
 
+        :param self: The CMV object.
+        :type self: CMV
+
+        :return: Returns True if `Q_PTS` sequential points lie in more quadrants than `QUADS`, False otherwise. Defaults to False if `Q_PTS < QUADS || NUMPOINTS < QUADS`.
+        :rtype: bool
+        """
         if self.Q_PTS < self.QUADS or self.NUMPOINTS < self.QUADS:
             return False
-        
+
         for i in range(0, self.NUMPOINTS - self.Q_PTS):
             window = self.POINTS[i : i + self.Q_PTS]
             quad_set = set(map(_determine_quadrant, window))
@@ -204,12 +206,16 @@ class CMV:
         return False
 
     def condition5(self):
-        """Check that two consecutive points where the latter X-component is
-        smaller than the first.
+        """
+        Check that two consecutive points where the latter X-component is smaller than the first. Checks
+        the condition by looking at all pairs until `NUMPOINTS - 1` and verifying if the latter point
+        has a smaller X-component than the first point.
 
-        Checks the condition by looking at all pairs until ` NUMPOINTS - 1` and
-        verifying if the latter point has a smaller X-component than the first 
-        point.
+        :param self: The CMV object.
+        :type self: CMV
+
+        :return: Returns True if any pair of consecutive points is found where the latter point's X-component is smaller than the first's, False otherwise.
+        :rtype: bool
         """
         for i in range(0, self.NUMPOINTS - 1):
             x1, _ = self.POINTS[i]
@@ -221,19 +227,17 @@ class CMV:
 
     def condition6(self):
         """
-        Determine whether there exists at least one set of N_PTS consecutive data points
-        where at least one of the points (p_0) is a distance greater than DIST from the line between
-        the first (p_1) and the last (p_2) of the N_PTS. If p_1 and p_2 coincide, then determine whether any
-        of the other N_PTS is a distance greater than DIST from p_1 (the coincident point)
+        Determine whether there exists at least one set of N_PTS consecutive data points where at least
+        one of the points (p_0) is a distance greater than DIST from the line between the first (p_1)
+        and the last (p_2) of the N_PTS. If p_1 and p_2 coincide, then determine whether any of the
+        other N_PTS is a distance greater than DIST from p_1 (the coincident point).
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if any of the described criteria is fulfilled
-        - False otherwise
+        :return: Returns True if any of the described criteria is fulfilled, False otherwise.
+        :rtype: bool
         """
-
         if self.NUMPOINTS < 3:
             return False
 
@@ -246,11 +250,11 @@ class CMV:
                     p_0 = n_points_array[point_index]
                     x_0, y_0 = p_0[0], p_0[1]
                     x_1, y_1 = p_1[0], p_1[1]
-                    x_2, y_2 = p_2[0], p_2[1]  
+                    x_2, y_2 = p_2[0], p_2[1]
                     distance_to_line = abs((x_2 - x_1)*(y_1 - y_0) - (x_1 - x_0)*(y_2 - y_1)) \
                                         / math.sqrt(math.pow(x_2 - x_1, 2) + math.pow(y_2 - y_1, 2))
 
-                    if distance_to_line > self.DIST:                        
+                    if distance_to_line > self.DIST:
                         return True
             else:
                 for point_index in range(1, len(n_points_array)-1):
@@ -260,23 +264,19 @@ class CMV:
                     distance_to_point = math.sqrt(math.pow(x_1 - x_0,2) + math.pow(y_1 - y_0, 2))
                     if distance_to_point > self.DIST:
                         return True
-        
+
         return False
-
-
 
     def condition7(self):
         """
-        Determine whether there exists at least one set of data 
-        points, separated by exactly K_PTS points, with a distance 
-        greater than LENGTH1.
+        Determine whether there exists at least one set of data points, separated by exactly K_PTS points,
+        with a distance greater than LENGTH1. 
 
-        Parameters:
-        - self: the CMV object
-        
-        Returns:
-        - True if the is a distance greater than LENGTH1
-        - False otherwise
+        :param self: The CMV object.
+        :type self: CMV
+
+        :return: Returns True if there is a distance greater than LENGTH1 between any set of data points separated by exactly K_PTS points, False otherwise.
+        :rtype: bool
         """
         if self.NUMPOINTS < 3:
             return False
@@ -290,15 +290,17 @@ class CMV:
         return False
 
     def condition8(self):
-        """Checks if three seperated points can be contained on/within a circle
-        of radius at most `RADIUS1`.
+        """
+        Checks if three separated points can be contained on/within a circle of radius at most `RADIUS1`.
+        Uses a sliding window across all points, where each window contains three points
+        separated by `A_PTS` and `B_PTS`. These points are then verified to be contained on or within a circle
+        of radius at most `RADIUS1` using the points' centroid. Defaults to false if `NUMPOINTS < 5`.
 
-        Uses a sliding window accross all points, where each window contains
-        three points seperated by `A_PTS` and `B_PTS`. These points are then
-        verified to be contained on  or within a circle of radius at most
-        `RADIUS1` using the points centroid.
+        :param self: The CMV object.
+        :type self: CMV
 
-        Defaults to false if `NUMPOINTS < 5`.
+        :return: Returns True if three separated points can be contained on/within a circle of radius at most `RADIUS1`, False otherwise. Defaults to False if `NUMPOINTS < 5`.
+        :rtype: bool
         """
         # Spec condition
         if self.NUMPOINTS < 5:
@@ -317,22 +319,20 @@ class CMV:
 
     def condition9(self):
         """
-        Determine whether there exists at least one set of three points separated by C_PTS and D_PTS 
-        consecutive intervening points that form an angle such that the internal angle is less than 
-        pi - EPSILON or external angle is larger than pi + EPSILON. This is only possible if the first
-        and third points do not coincide with the second point.
+        Determine whether there exists at least one set of three points separated by C_PTS and D_PTS
+        consecutive intervening points that form an angle such that the internal angle is less than
+        pi - EPSILON or external angle is larger than pi + EPSILON. This is only possible if the
+        first and third points do not coincide with the second point.
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if any of the described criteria is fulfilled
-        - False otherwise
+        :return: Returns True if any of the described criteria is fulfilled, False otherwise.
+        :rtype: bool
         """
-
         if self.NUMPOINTS < 5:
             return False
-        
+
         for i in range(self.NUMPOINTS - self.C_PTS - self.D_PTS - 2):
             (x1,y1) = self.POINTS[i]
             (x2,y2) = self.POINTS[i + self.C_PTS + 1]
@@ -348,12 +348,14 @@ class CMV:
                     return True
 
         return False
-        
 
     def condition10(self):
         """
         Check for the existence of a triangle formed by three data points separated by exactly E PTS and F PTS
         consecutive intervening points. IF the area of the triangle is greater than AREA1 we return True.
+
+        :param self: The CMV object.
+        :type self: CMV
 
         :return: True if such a set of points exists, False otherwise.
         :rtype: bool
@@ -380,47 +382,44 @@ class CMV:
 
     def condition11(self):
         """
-        Determine whether there is at least one set of two data points, (X[i], Y[i]) and (X[j], Y[j]), separated by exactly G_PTS
-        consecutive intervening points such that X[j] - X[i] < 0. (where i < j ) The condition is not met when NUMPOINTS < 3.
+        Determine whether there is at least one set of two data points, (X[i], Y[i]) and (X[j], Y[j]),
+        separated by exactly G_PTS consecutive intervening points such that X[j] - X[i] < 0 (where i < j).
+        The condition is not met when NUMPOINTS < 3.
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if X[j] - X[i] < 0 and NUMPOINTS > 2
-        - False otherwise
+        :return: Returns True if X[j] - X[i] < 0 and NUMPOINTS > 2, False otherwise.
+        :rtype: bool
         """
         if self.NUMPOINTS < 3:
             return False
         for i in range(self.NUMPOINTS - self.G_PTS - 1):
             (xi, _) = self.POINTS[i]
             (xj, _) = self.POINTS[i + self.G_PTS + 1]
-            
+
             if xj - xi < 0:
                 return True
         return False
 
     def condition12(self):
         """
-        Determine whether there exists at least one set of two points separated by K_PTS
-        consecutive intervening points, where these two are more than LENGTH1 apart. If this holds,
-        determine if there are also two points fulfilling the same criteria, but that are less than
-        LENGTH2 apart.
+        Determine whether there exists at least one set of two points separated by K_PTS consecutive
+        intervening points, where these two are more than LENGTH1 apart. If this holds, determine
+        if there are also two points fulfilling the same criteria, but that are less than LENGTH2 apart.
 
-        Parameters:
-        - self: the CMV object
+        :param self: The CMV object.
+        :type self: CMV
 
-        Returns:
-        - True if both of the criteria above hold
-        - False otherwise
+        :return: Returns True if both of the criteria above hold, False otherwise.
+        :rtype: bool
         """
-
         condition1 = False
         condition2 = False
 
         if self.NUMPOINTS < 3:
             return False
-        
+
         for i in range(self.NUMPOINTS - self.K_PTS - 1):
             (x1,y1) = self.POINTS[i]
             (x2,y2) = self.POINTS[i + self.K_PTS + 1]
@@ -430,7 +429,7 @@ class CMV:
             if distance_1 > self.LENGTH1:
                 condition1 = True
                 break
-                
+
         if condition1:
             for i in range(self.NUMPOINTS - self.K_PTS - 1):
                 (x1,y1) = self.POINTS[i]
@@ -449,8 +448,11 @@ class CMV:
 
         Check for the existence of a circles formed by three data points separated by exactly A_PTS and B_PTS
         consecutive intervening points. We want to find a set of three points that are not inside or on the circle.
-        Than we also want to find new or the same set of points that thar is isnide or on the circle.
+        Than we also want to find new or the same set of points that that is in or on the circle.
         If both of these conditions are true, then the condition is satisfied.
+
+        :param self: The CMV object.
+        :type self: CMV
 
         :return: True if the condition is satisfied, False otherwise
         :rtype: bool
@@ -485,14 +487,16 @@ class CMV:
                 condition_two = True
 
         return condition_one and condition_two
-            
-                
+
     def condition14(self):
         """
         Check for the existence of a triangle formed by three data points separated by exactly E PTS and F PTS
         consecutive intervening points. We want to find any triangle made of these points that has an area
         greater than AREA1. We also want to find a set of three points that form a triangle with an area less
         than AREA2. If both of these conditions are true, then the condition is satisfied.
+
+        :param self: The CMV object.
+        :type self: CMV
 
         :return: True if the condition is satisfied, False otherwise
         :rtype: bool
