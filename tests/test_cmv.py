@@ -79,6 +79,21 @@ class TestCMV(unittest.TestCase):
         self.assertFalse(cmv.condition0())
 
         
+    def test_condition2(self):
+        filename = "cmv_cond2.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        cmv.POINTS = [(0,0),(1,0),(2,0)]
+        cmv.NUMPOINTS = 3
+        cmv.EPSILON = 1
+        self.assertFalse(cmv.condition2())
+        cmv.POINTS = []
+        cmv.NUMPOINTS = 0
+        self.assertFalse(cmv.condition2())
+        cmv.POINTS = [(0,0),(1,0),(2,0)]
+        cmv.NUMPOINTS = 3
+        cmv.EPSILON = 0
+        self.assertTrue(cmv.condition2())
+        
     def test_condition3(self):
         """
             Test the condition3 method of the CMV class.

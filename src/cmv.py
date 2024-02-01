@@ -1,5 +1,6 @@
 import itertools
 import math
+from src.parse import PI
 
 def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
     """Check what quadrant a point lies in, favouring lower numbered quadrants. Utility funciton.
@@ -112,7 +113,33 @@ class CMV:
         pass
 
     def condition2(self):
-        pass
+        """
+        Determine whether there exists at least one set of three consecutive data points that are the vertices of a triangle
+
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - True if there exist a set of three consecutive data points that are the vertices of a triangle
+        """
+        for i in range(len(self.POINTS)-2):
+            first_point = self.POINTS[i]
+            second_point = self.POINTS[i+1]
+            third_point = self.POINTS[i+2]
+            if first_point == second_point or second_point == third_point or first_point == third_point:
+                return False
+            else:
+                # Calculate angle between the three points
+                vectorij = (second_point[0]-first_point[0], second_point[1]-first_point[1])
+                vectorkj = (second_point[0]-third_point[0], second_point[1]-third_point[1])
+                dot_product = vectorij[0]*vectorkj[0] + vectorij[1]*vectorkj[1]
+                length_ij = math.dist(first_point, second_point)
+                length_kj = math.dist(second_point, third_point)
+                angle = math.acos(dot_product/(length_ij*length_kj))
+                if angle < (PI - self.EPSILON) or angle > (PI + self.EPSILON):
+                    return True
+                else:
+                    return False 
 
     def condition3(self):
         """
