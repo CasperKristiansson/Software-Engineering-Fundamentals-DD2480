@@ -450,8 +450,49 @@ class CMV:
         return condition1 and condition2
 
     def condition13(self):
-        pass
+        """
+        Determine whether there exists at least one set of three points separated by A_PTS and B_PTS
 
+        Check for the existence of a circles formed by three data points separated by exactly A_PTS and B_PTS
+        consecutive intervening points. We want to find a set of three points that are not inside or on the circle.
+        Than we also want to find new or the same set of points that thar is isnide or on the circle.
+        If both of these conditions are true, then the condition is satisfied.
+
+        :return: True if the condition is satisfied, False otherwise
+        :rtype: bool
+        """
+
+        if self.NUMPOINTS < 5:
+            return False
+
+        condition_one = False
+        condition_two = False
+
+        for i in range(len(self.POINTS) - self.A_PTS - self.B_PTS - 2):
+            tripod_check = _check_tripoint_radius(
+                self.POINTS[i],
+                self.POINTS[i + self.A_PTS + 1],
+                self.POINTS[i + self.A_PTS + self.B_PTS + 2],
+                self.RADIUS1
+            )
+
+            if not tripod_check:
+                condition_one = True
+
+        for i in range(len(self.POINTS) - self.A_PTS - self.B_PTS - 2):
+            tripod_check = _check_tripoint_radius(
+                self.POINTS[i],
+                self.POINTS[i + self.A_PTS + 1],
+                self.POINTS[i + self.A_PTS + self.B_PTS + 2],
+                self.RADIUS2
+            )
+
+            if tripod_check:
+                condition_two = True
+
+        return condition_one and condition_two
+            
+                
     def condition14(self):
         """
         Check for the existence of a triangle formed by three data points separated by exactly E PTS and F PTS

@@ -484,6 +484,49 @@ class TestCMV(unittest.TestCase):
         cmv.NUMPOINTS = 2
         self.assertFalse(cmv.condition12())
 
+    def test_condition13(self):
+        """
+            Test the condition13 method of the CMV class.
+
+            This method checks the behavior of the condition14 method under various scenarios:
+            1. An instance where the number of points is less than 5
+            2. An instance where no points is outside RADIUS1 circle
+            3. An instance where no points is inside/on RADIUS2 circle
+            4. An instance where that upfills both the conditions
+
+            :params self: The instance of the test class.
+            :returns: None
+        """
+
+        filename = "cmv_cond13.in"
+        cmv = self.instantiate_object(os.path.join(os.path.dirname(__file__), "data", filename))
+        
+
+        # TO MANY POINTS
+        cmv.POINTS = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertFalse(cmv.condition13())
+
+        # Test 2: No points in a consecutive intervening points that is outside the circle with RADIUS1
+        cmv.RADIUS1 = 100
+        cmv.B_PTS = 1
+        cmv.A_PTHS = 1
+        self.assertFalse(cmv.condition13())
+
+        # Test 3: No points in a consecutive intervening points that is inside or on the circle with RADIUS2
+        cmv.RADIUS2 = 0.1
+        self.assertFalse(cmv.condition13())
+        
+        # Test 4: Upfills both the conditions
+        cmv.points = [(0, 0), (1, 0), (0, 2), (4, 3)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        cmv.A_PTS = 1
+        cmv.B_PTS = 1
+        cmv.RADIUS1 = 0
+        cmv.RADIUS2 = 20
+        self.assertTrue(cmv.condition13())
+
+        
     def test_condition14(self):
         """
             Test the condition14 method of the CMV class.
