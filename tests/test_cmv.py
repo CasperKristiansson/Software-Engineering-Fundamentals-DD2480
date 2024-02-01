@@ -1,4 +1,4 @@
-from time import sleep
+import math
 import unittest
 import sys
 import os
@@ -6,7 +6,7 @@ import os
 # Add root folder to current path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
-from src.cmv import CMV, _determine_quadrant
+from src.cmv import CMV, _determine_quadrant, _check_tripoint_radius
 from src.parse import read_input_to_dict
 
 class TestCMV(unittest.TestCase):
@@ -42,6 +42,21 @@ class TestCMV(unittest.TestCase):
 
         self.assertIs(_determine_quadrant((1, -1)), 4)
         self.assertIs(_determine_quadrant((0.34, -75)), 4)
+
+    def test_check_tripoint_radius(self):
+        """Tests `cmv/_check_tripoint_radius` for different types of tripoint
+        setups.
+
+        It should be able to handle randomly distributed points as well as 
+        structured points, like unit vector points on the unit circle.
+        """
+        self.assertFalse(_check_tripoint_radius((0, 1), (1, 0), (5, 2), 1.0))
+        self.assertFalse(_check_tripoint_radius((3, 4), (2, 1), (5, 2), 1.7))
+
+        self.assertTrue(_check_tripoint_radius((0, 1), (1, 0), (-1, 0), 1.0))
+        self.assertTrue(_check_tripoint_radius((3, 4), (2, 1), (5, 2), 2.0))
+        self.assertTrue(_check_tripoint_radius((0, 1), (0, 0), (1, 0), 2.0))
+        self.assertTrue(_check_tripoint_radius((0, 1), (0, 0), (1, 0), math.sqrt(2)))
 
 
     def test_condition3(self):
@@ -128,9 +143,6 @@ class TestCMV(unittest.TestCase):
         cmv.POINTS = [(2, 0), (2, 0), (2, 0), (2, 0)]
         cmv.NUMPOINTS = len(cmv.POINTS)
         self.assertFalse(cmv.condition5(), "A list of points with the same X should return false")
-        
-
-    
 
     def test_condition6(self):
         """
@@ -209,6 +221,46 @@ class TestCMV(unittest.TestCase):
         cmv.K_PTS = 1
         cmv.LENGTH1 = 11.313708498984761
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
+
+    def test_condition8(self):
+        """Test cases for condition 8.
+
+        > There exists at least one set of three data points separated by
+        > exactly A PTS and B PTS consecutive intervening points,
+        > respectively, that cannot be contained within or on a circle of
+        > radius RADIUS1. The condition is not met when NUMPOINTS < 5.
+        
+        Test scenarios:
+        - True on [(0, 0), (1, 1), (1, 0), (1, 1), (0, 1)] R=0.5 A=B=1 (longest
+          distance is sqrt(2))
+        - False on [(0, 0), (1, 1), (1, 0), (1, 1), (0, 1)] R=2 A=B=1 (all
+          points can be covered)
+        - False on [(0, 0), (1, 1), (1, 0), (1, 1), (0, 1)] R=inf A=B=1 (all
+          points can be covered)
+        - True on [(0, 0), (1, 1), (1, 0), (1, 1), (0, 2)] R=0.5 A=B=1 (last
+          point to far away)
+        - False on NUMPOINTS < 5
+        """
+        
+        filename = "cmv_cond8.in"
+        filepath = os.path.join(os.path.dirname(__file__), "data", filename)
+        cmv = self.instantiate_object(filepath)
+
+        self.assertTrue(cmv.condition8(), "Should true; largest dist is sqrt(2) and max dist is 1")
+
+        cmv.RADIUS1 = 2
+        self.assertFalse(cmv.condition8(), "Should false; R=2 and all points are within R=sqrt(2)")
+
+        cmv.RADIUS1 = float('inf')
+        self.assertFalse(cmv.condition8(), "Should false; all distances are covered in inf radius")
+
+        cmv.RADIUS1 = 0.5
+        cmv.POINTS[4] = (0, 2)
+        self.assertTrue(cmv.condition8(), "Should true; (0, 2) is too far away to be covered by R=0.5")
+
+        cmv.POINTS = cmv.POINTS[:3]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertFalse(cmv.condition8(), "Should false; only contains 3 points")
 
     def test_condition9(self):
 

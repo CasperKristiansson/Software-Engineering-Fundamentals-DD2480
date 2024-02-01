@@ -1,4 +1,4 @@
-
+import itertools
 import math
 
 def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
@@ -20,6 +20,50 @@ def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
         return 3
     else:
         return 4
+
+def _check_tripoint_radius(
+        a: tuple[float, float] | list[float],
+        b: tuple[float, float] | list[float],
+        c: tuple[float, float] | list[float],
+        r: float) -> bool:
+    """Check that a, b, and c can be contained on/within
+    a circle of radius at most r.
+
+    Uses all points to calculate a different centroids
+    points and checks that all points are accessible
+    from the centroid with at most r radius.
+
+    :param a: First point.
+    :type a: tuple[float, float] | list[float]
+
+    :param b: Second point.
+    :type b: tuple[float, float] | list[float]
+
+    :param c: Third point.
+    :type c: tuple[float, float] | list[float]
+
+    :return: Returns wether or not all three points can
+    be contained or on a circle of radius r.
+    :rtype: bool
+    """
+
+    # Centroid combinations of 2 points
+    for p1, p2 in itertools.combinations([a, b, c], 2):
+        centroid = (p1[0] + p2[0]) / 2, \
+                    (p1[1] + p2[1]) / 2
+
+        if math.dist(centroid, a) <= r and \
+                math.dist(centroid, b) <= r and \
+                math.dist(centroid, c) <= r:
+            return True
+    
+    # Final centroid, between all three points
+    centroid = (a[0] + b[0] + c[0]) / 3, \
+                (a[1] + b[1] + c[1]) / 3
+
+    return math.dist(centroid, a) <= r and \
+            math.dist(centroid, b) <= r and \
+            math.dist(centroid, c) <= r
 
 class CMV:
     def __init__(self, d):
@@ -183,7 +227,30 @@ class CMV:
         return False
 
     def condition8(self):
-        pass
+        """Checks if three seperated points can be contained on/within a circle
+        of radius at most `RADIUS1`.
+
+        Uses a sliding window accross all points, where each window contains
+        three points seperated by `A_PTS` and `B_PTS`. These points are then
+        verified to be contained on  or within a circle of radius at most
+        `RADIUS1` using the points centroid.
+
+        Defaults to false if `NUMPOINTS < 5`.
+        """
+        # Spec condition
+        if self.NUMPOINTS < 5:
+            return False
+
+        # -2 for offsetting three points, A_PTS and B_PTS for the seperation
+        for i in range(0, self.NUMPOINTS - 2 - self.A_PTS - self.B_PTS):
+            a = self.POINTS[i]
+            b = self.POINTS[i + self.A_PTS + 1]
+            c = self.POINTS[i + self.A_PTS + 1 + self.B_PTS + 1]
+
+            if not _check_tripoint_radius(a, b, c, self.RADIUS1):
+                return True
+
+        return False
 
     def condition9(self):
         """
