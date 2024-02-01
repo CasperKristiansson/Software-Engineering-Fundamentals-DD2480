@@ -208,3 +208,25 @@ class TestCMV(unittest.TestCase):
         cmv.K_PTS = 1
         cmv.LENGTH1 = 11.313708498984761
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
+
+
+    def test_condition9(self):
+
+        filename="condition9/cmv_cond9_accept.in"
+
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        self.assertTrue(cmv.condition9())
+
+        epsilon_prev = cmv.EPSILON
+        cmv.EPSILON = 2.5
+        self.assertFalse(cmv.condition9())
+
+        cmv.EPSILON = epsilon_prev
+        numpoints_prev = cmv.NUMPOINTS
+        cmv.NUMPOINTS = 4
+        self.assertFalse(cmv.condition9())
+
+        cmv.NUMPOINTS = numpoints_prev
+        points0_prev = cmv.POINTS[0]
+        cmv.POINTS[0] = cmv.POINTS[2]
+        self.assertFalse(cmv.condition9())

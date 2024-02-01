@@ -186,7 +186,39 @@ class CMV:
         pass
 
     def condition9(self):
-        pass
+        """
+        Determine whether there exists at least one set of three points separated by C_PTS and D_PTS 
+        consecutive intervening points that form an angle such that the internal angle is less than 
+        pi - EPSILON or external angle is larger than pi + EPSILON. This is only possible if the first
+        and third points do not coincide with the second point.
+
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - True if any of the described criteria is fulfilled
+        - False otherwise
+        """
+
+        if self.NUMPOINTS < 5:
+            return False
+        
+        for i in range(self.NUMPOINTS - self.C_PTS - self.D_PTS - 2):
+            (x1,y1) = self.POINTS[i]
+            (x2,y2) = self.POINTS[i + self.C_PTS + 1]
+            (x3,y3) = self.POINTS[i + self.C_PTS + self.D_PTS + 2]
+
+            if ((x2,y2) not in [(x1,y1), (x3,y3)]):
+                a = math.sqrt(math.pow(x3 - x2, 2) + math.pow(y3 - y2, 2))
+                b = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+                c = math.sqrt(math.pow(x1 - x3, 2) + math.pow(y1 - y3, 2))
+                internal_angle = math.acos((math.pow(a, 2) + math.pow(b, 2) - math.pow(c, 2)) / (2*a*b))
+                external_angle = 2*math.pi - internal_angle
+                if (internal_angle < math.pi - self.EPSILON) or (external_angle > math.pi + self.EPSILON):
+                    return True
+
+        return False
+        
 
     def condition10(self):
         pass
