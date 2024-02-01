@@ -1,5 +1,6 @@
 import itertools
 import math
+import src.utils as utils
 from src.parse import PI
 
 def _determine_quadrant(point: tuple[float, float] | list[float]) -> int:
@@ -173,13 +174,10 @@ class CMV:
 
         if len(self.POINTS) < 3:
             return False
-        
+
         for i in range(len(self.POINTS)-2):
-            (x1,y1) = self.POINTS[i]
-            (x2,y2) = self.POINTS[i+1]
-            (x3,y3) = self.POINTS[i+2]
-            area = 0.5 * abs(x1*(y2-y3) + x2*(y3-y1) + x3*(y1-y2))
-            
+            area = utils.area_of_triangle(self.POINTS[i], self.POINTS[i+1], self.POINTS[i+2])
+
             if area > self.AREA1:
                 return True
         return False
@@ -360,17 +358,6 @@ class CMV:
         :return: True if such a set of points exists, False otherwise.
         :rtype: bool
         """
-        def area_of_triangle(p1, p2, p3):
-            """
-            Calculate the area of a triangle given its vertices.
-
-            :param tuple(float, float) p1: Coordinates of the first vertex as a tuple (x1, y1)
-            :param tuple(float, float) p2: Coordinates of the second vertex as a tuple (x2, y2)
-            :param tuple(float, float) p3: Coordinates of the third vertex as a tuple (x3, y3)
-            :return: The area of the triangle
-            :rtype: float
-            """
-            return abs(0.5 * (p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])))
 
         if self.NUMPOINTS < 5:
             return False
@@ -380,7 +367,7 @@ class CMV:
             return False
 
         for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
-            area = area_of_triangle(
+            area = utils.area_of_triangle(
                 self.POINTS[i],
                 self.POINTS[i + self.E_PTS + 1],
                 self.POINTS[i + self.E_PTS + self.F_PTS + 2]
@@ -510,17 +497,6 @@ class CMV:
         :return: True if the condition is satisfied, False otherwise
         :rtype: bool
         """
-        def area_of_triangle(p1, p2, p3):
-            """
-            Calculate the area of a triangle given its vertices.
-            :param tuple(float, float) p1: Coordinates of the first vertex as a tuple (x1, y1)
-            :param tuple(float, float) p2: Coordinates of the second vertex as a tuple (x2, y2)
-            :param tuple(float, float) p3: Coordinates of the third vertex as a tuple (x3, y3)
-            :return: The area of the triangle
-            :rtype: float
-            """
-            return abs(0.5 * (p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])))
-
         if self.NUMPOINTS < 5:
             return False
         if self.AREA2 < 0:
@@ -530,7 +506,7 @@ class CMV:
         condition_two = False
 
         for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
-            area = area_of_triangle(
+            area = utils.area_of_triangle(
                 self.POINTS[i],
                 self.POINTS[i + self.E_PTS + 1],
                 self.POINTS[i + self.E_PTS + self.F_PTS + 2]
@@ -541,7 +517,7 @@ class CMV:
                 break
 
         for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
-            area = area_of_triangle(
+            area = utils.area_of_triangle(
                 self.POINTS[i],
                 self.POINTS[i + self.E_PTS + 1],
                 self.POINTS[i + self.E_PTS + self.F_PTS + 2]
