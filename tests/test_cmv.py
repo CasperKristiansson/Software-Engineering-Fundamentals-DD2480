@@ -284,6 +284,21 @@ class TestCMV(unittest.TestCase):
         self.assertFalse(cmv.condition8(), "Should false; only contains 3 points")
 
     def test_condition9(self):
+        """
+            Test the condition9 method of the CMV class.
+
+            This method checks the behavior of the condition9 method under various scenarios:
+            1. An instance where the requirement is fulfilled
+            2. Same instance with a new EPSILON s.t. the requirement no longer holds
+            3. Same instance where the number of points are too few
+            4. Same instance where the first point coincide with the second one, hence undefined angle
+            
+            Parameters:
+            - self: The instance of the test class.
+            
+            Returns:
+            - None
+        """
 
         filename="condition9/cmv_cond9_accept.in"
 
@@ -324,6 +339,7 @@ class TestCMV(unittest.TestCase):
             Returns:
             None
          """
+        
         #Assert that it returns True when it should
         filename = "cmv_cond11_accept.in"
         cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
