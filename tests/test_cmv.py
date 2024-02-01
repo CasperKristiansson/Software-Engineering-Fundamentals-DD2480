@@ -282,6 +282,7 @@ class TestCMV(unittest.TestCase):
         points0_prev = cmv.POINTS[0]
         cmv.POINTS[0] = cmv.POINTS[2]
         self.assertFalse(cmv.condition9())
+
     
     def test_condition11(self):
         """
@@ -331,3 +332,34 @@ class TestCMV(unittest.TestCase):
         cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
         self.assertTrue(cmv.condition11())
 
+    def test_condition12(self):
+        """
+            Test the condition12 method of the CMV class.
+
+            This method checks the behavior of the condition12 method under various scenarios:
+            1. An instance where the requirement is fulfilled
+            2. An instance where the first requirement is fulfilled, but not the second one
+            3. An instance where the second requirement is fulfilled, but not the first one
+            4. An instance where the number of points does not fulfill the requirements
+            
+            Parameters:
+            - self: The instance of the test class.
+            
+            Returns:
+            - None
+        """
+
+        filename="condition12/cmv_cond12_accept.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        self.assertTrue(cmv.condition12())
+
+        filename="condition12/cmv_cond12_reject.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        self.assertFalse(cmv.condition12())
+
+        filename="condition12/cmv_cond12_reject2.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        self.assertFalse(cmv.condition12())
+
+        cmv.NUMPOINTS = 2
+        self.assertFalse(cmv.condition12())

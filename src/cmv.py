@@ -73,21 +73,21 @@ class CMV:
     
     def construct_vector(self):
         return [
-            self.condition0(),
-            self.condition1(),
-            self.condition2(),
-            self.condition3(),
-            self.condition4(),
-            self.condition5(),
-            self.condition6(),
-            self.condition7(),
-            self.condition8(),
-            self.condition9(),
-            self.condition10(),
-            self.condition11(),
-            self.condition12(),
-            self.condition13(),
-            self.condition14(),
+            # self.condition0(),
+            # self.condition1(),
+            # self.condition2(),
+            # self.condition3(),
+            # self.condition4(),
+            # self.condition5(),
+            # self.condition6(),
+            # self.condition7(),
+            # self.condition8(),
+            # self.condition9(),
+            # self.condition10(),
+            # self.condition11(),
+            # self.condition12(),
+            # self.condition13(),
+            # self.condition14(),
         ]
     
     def condition0(self):
@@ -313,7 +313,47 @@ class CMV:
         return False
 
     def condition12(self):
-        pass
+        """
+        Determine whether there exists at least one set of two points separated by K_PTS
+        consecutive intervening points, where these two are more than LENGTH1 apart. If this holds,
+        determine if there are also two points fulfilling the same criteria, but that are less than
+        LENGTH2 apart.
+
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - True if both of the criteria above hold
+        - False otherwise
+        """
+
+        condition1 = False
+        condition2 = False
+
+        if self.NUMPOINTS < 3:
+            return False
+        
+        for i in range(self.NUMPOINTS - self.K_PTS - 1):
+            (x1,y1) = self.POINTS[i]
+            (x2,y2) = self.POINTS[i + self.K_PTS + 1]
+
+            distance_1 = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+
+            if distance_1 > self.LENGTH1:
+                condition1 = True
+                break
+                
+        if condition1:
+            for i in range(self.NUMPOINTS - self.K_PTS - 1):
+                (x1,y1) = self.POINTS[i]
+                (x2,y2) = self.POINTS[i + self.K_PTS + 1]
+
+                distance_2 = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+
+                if distance_2 < self.LENGTH2:
+                    condition2 = True
+
+        return condition1 and condition2
 
     def condition13(self):
         pass
