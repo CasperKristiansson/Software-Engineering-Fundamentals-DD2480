@@ -81,13 +81,49 @@ sphinx-build -b pdf source build/pdf
 
 This command instructs Sphinx to build the documentation in PDF format.
 
+## Methodology Self-Assessment
+Currently the team lies somewhere inbetween "In Use" and "In Place". The first
+item, "Principles Established" was covered in the first meeting held by group,
+when agreeing on the code-of-conduct. During that meeting, the team decided
+general approach necessary as well as what kind of tools would be necessary
+and used. Later, a second meeting was held to discuss the specifics (such as
+exact tools and versions, roles, responsibilities, and other specifics) that
+established the clearance for "Foundation Established" as well as some first
+tasks to get the project started. During the continuation of the project, the
+team has evolved the usage of the tools and practices to taking a place in
+the "In Place" state. To move further into "In Place" and in the end get to
+"Working Well", the team simply needs more practice with the methodologies,
+tools, and practices to make them second-nature rather than an attached task
+for each moment in the project.
+
 ## Contributions
 
 **Andreas**
 - Main repo admin (issues, reviewing, labeling, etc)
-- LIC 4, 5
+- Summarised Self-Assessment into [README](#methodology-self-assessment)
+- LIC 4, 5, 8
 
 **Martin**
 - Test suite responsible (create foundation for testing framework and project skeleton, review tests in pull requests)
 - LIC 6, 9, 12
 - Creation of the Preliminary Unlocking Matrix (PUM)
+
+**Adam**
+- Setup discord and git repo
+- Discord webhooks integration
+- LIC 0, 1, 2, 13
+
+**Victor**
+- Set up code skeleton for cmv, parser, pum, fuv, decide files
+- LIC 3, 7, 11 with tests
+- Parser with tests
+- FUV with tests
+- Decide with tests along with **Martin** and **Adam**
+
+**Casper**
+- Configured Sphinx to automatically generate documentation (with theme). This includes both a PDF and HTML version of the documentation.
+- Setup GitHub Actions to:
+    - Run python tests on pull requests
+    - Generate documentation on merge to main
+    - Generate website on merge to main
+- LIC 10, 13 (co-authored), 14
