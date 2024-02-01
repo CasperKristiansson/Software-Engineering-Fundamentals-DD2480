@@ -410,4 +410,54 @@ class CMV:
         pass
 
     def condition14(self):
-        pass
+        """
+        Check for the existence of a triangle formed by three data points separated by exactly E PTS and F PTS
+        consecutive intervening points. We want to find any triangle made of these points that has an area
+        greater than AREA1. We also want to find a set of three points that form a triangle with an area less
+        than AREA2. If both of these conditions are true, then the condition is satisfied.
+
+        :return: True if the condition is satisfied, False otherwise
+        :rtype: bool
+        """
+        def area_of_triangle(p1, p2, p3):
+            """
+            Calculate the area of a triangle given its vertices.
+            :param tuple(float, float) p1: Coordinates of the first vertex as a tuple (x1, y1)
+            :param tuple(float, float) p2: Coordinates of the second vertex as a tuple (x2, y2)
+            :param tuple(float, float) p3: Coordinates of the third vertex as a tuple (x3, y3)
+            :return: The area of the triangle
+            :rtype: float
+            """
+            return abs(0.5 * (p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])))
+
+        if self.NUMPOINTS < 5:
+            return False
+        if self.AREA2 < 0:
+            return False
+
+        condition_one = False
+        condition_two = False
+
+        for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
+            area = area_of_triangle(
+                self.POINTS[i],
+                self.POINTS[i + self.E_PTS + 1],
+                self.POINTS[i + self.E_PTS + self.F_PTS + 2]
+            )
+
+            if area > self.AREA1:
+                condition_one = True
+                break
+
+        for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
+            area = area_of_triangle(
+                self.POINTS[i],
+                self.POINTS[i + self.E_PTS + 1],
+                self.POINTS[i + self.E_PTS + self.F_PTS + 2]
+            )
+
+            if area < self.AREA2:
+                condition_two = True
+                break
+
+        return condition_one and condition_two

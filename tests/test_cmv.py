@@ -369,7 +369,6 @@ class TestCMV(unittest.TestCase):
         cmv.POINTS[0] = cmv.POINTS[2]
         self.assertFalse(cmv.condition9())
 
-    
     def test_condition11(self):
         """
             Test cases for the condition11 cmv method.
@@ -451,6 +450,58 @@ class TestCMV(unittest.TestCase):
         cmv.NUMPOINTS = 2
         self.assertFalse(cmv.condition12())
 
-        
+    def test_condition14(self):
+        """
+            Test the condition14 method of the CMV class.
+
+            This method checks the behavior of the condition14 method under various scenarios:
+            1. An instance where the requirement is fulfilled
+            2. An instance where the number of points is less than 5
+            3. An instance where AREA2 is negative
+            4. An instance where no triangle is greater than AREA1
+            5. An instance where no triangle is less than AREA2
+            6. An instance where a triangle is greater than AREA1 and less than AREA2
+
+            :params self: The instance of the test class.
+            :returns: None
+        """
+        cmv = self.instantiate_object(os.path.join(os.path.dirname(__file__), "data", "cmv_cond14.in"))
+
+        cmv.POINTS = [(0, 0), (3, 0), (1, 2), (4, 4), (6, 6), (8, 8), (8, 8)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+
+        # Test 1: Function should return False because there are less than 5 points
+        cmv.NUMPOINTS = 4
+        self.assertFalse(cmv.condition14())
+        cmv.NUMPOINTS = len(cmv.POINTS)
+
+        # Test 2: AREA2 is negative
+        cmv.AREA2 = -1
+        self.assertFalse(cmv.condition14())
+        cmv.AREA2 = 20
+
+        # Test 3: No Triangle is greater than AREA1
+        cmv.AREA1 = 100
+        cmv.E_PTS = 1
+        cmv.F_PTS = 1
+        self.assertFalse(cmv.condition14())
+        cmv.AREA1 = 0.5
+
+        # Test 4: No Triangle is less than AREA2
+        cmv.AREA2 = 0.0001
+        cmv.E_PTS = 1
+        cmv.F_PTS = 1
+        self.assertFalse(cmv.condition14())
+        cmv.AREA2 = 20
+
+        # Test 5: Triangle is greater than AREA1 and less than AREA2
+        cmv.AREA1 = 0.5
+        cmv.AREA2 = 20
+        cmv.E_PTS = 1
+        cmv.F_PTS = 1
+        self.assertTrue(cmv.condition14())
+
+
 if __name__ == '__main__':
     unittest.main()
+
