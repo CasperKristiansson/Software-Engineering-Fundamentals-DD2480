@@ -1,5 +1,9 @@
 # DD2480G24
 
+### DECIDE
+This project creates an implementation for the DECIDE program specified in the file
+`specification.pdf` contained within the `docs` folder
+
 ### Testing
 
 The unit testing is based on the Python built in `unittest` framework (https://docs.python.org/3/library/unittest.html)
