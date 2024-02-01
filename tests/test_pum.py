@@ -31,7 +31,8 @@ class TestPUM(unittest.TestCase):
         example found in the DECIDE program specification.
         """
 
-        cmv = CMV({})
+        filename = "cmv_cond14.in"
+        cmv = self.instantiate_object(os.path.join(os.path.dirname(__file__), "data", filename))
 
         cmv.CMV_VECTOR = [False, True, True, True, False, False, False, False, False, False, False, False, False, False, False]
         cmv.LCM = [
@@ -53,21 +54,21 @@ class TestPUM(unittest.TestCase):
         ] 
         
         expected_pum = [
-            [None, False, True, False, True, True, True, True, True, True, True, True, True, True, True],
-            [False, None, True, True, True, True, True, True, True, True, True, True, True, True, True],
-            [True, True, None, True, True, True, True, True, True, True, True, True, True, True, True],
-            [False, True, True, None, True, True, True, True, True, True, True, True, True, True, True],
-            [True, True, True, True, None, True, True, True, True, True, True, True, True, True, True],
-            [True, True, True, True, True, None, True, True, True, True, True, True, True, True, True],
-            [True, True, True, True, True, True, None, True, True, True, True, True, True, True, True],
-            [True, True, True, True, True, True, True, None, True, True, True, True, True, True, True],
-            [True, True, True, True, True, True, True, True, None, True, True, True, True, True, True],
-            [True, True, True, True, True, True, True, True, True, None, True, True, True, True, True],
-            [True, True, True, True, True, True, True, True, True, True, None, True, True, True, True],
-            [True, True, True, True, True, True, True, True, True, True, True, None, True, True, True],
-            [True, True, True, True, True, True, True, True, True, True, True, True, None, True, True],
-            [True, True, True, True, True, True, True, True, True, True, True, True, True, None, True],  
-            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, None]
+            [True, False, True, False, True, True, True, True, True, True, True, True, True, True, True],
+            [False, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [False, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True],  
+            [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
         ]
 
         actual_pum = create_pum(cmv)

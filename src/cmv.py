@@ -75,21 +75,21 @@ class CMV:
     
     def construct_vector(self):
         return [
-            #self.condition0(),
-            #self.condition1(),
-            #self.condition2(),
-            #self.condition3(),
-            #self.condition4(),
-            #self.condition5(),
-            #self.condition6(),
-            #self.condition7(),
-            #self.condition8(),
-            #self.condition9(),
-            #self.condition10(),
-            #self.condition11(),
-            #self.condition12(),
-            #self.condition13(),
-            #self.condition14(),
+            self.condition0(),
+            self.condition1(),
+            self.condition2(),
+            self.condition3(),
+            self.condition4(),
+            self.condition5(),
+            self.condition6(),
+            self.condition7(),
+            self.condition8(),
+            self.condition9(),
+            self.condition10(),
+            self.condition11(),
+            self.condition12(),
+            self.condition13(),
+            self.condition14(),
         ]
     
     def condition0(self):
@@ -401,7 +401,7 @@ class CMV:
         for i in range(self.NUMPOINTS - self.G_PTS - 1):
             (xi, _) = self.POINTS[i]
             (xj, _) = self.POINTS[i + self.G_PTS + 1]
-
+            
             if xj - xi < 0:
                 return True
         return False

@@ -72,11 +72,13 @@ def create_pum(cmv):
         "NOTUSED": not_used
     }
 
-    pum = [[None] * 15 for _ in range(15)]
+    pum = [[False] * 15 for _ in range(15)]
     
     for i in range(15):
         for j in range(15):
             if i != j:
                 pum[i][j] = connectors[lcm[i][j]](cmv_vector[i], cmv_vector[j])
+            else:
+                pum[i][j] = True
 
     return pum
