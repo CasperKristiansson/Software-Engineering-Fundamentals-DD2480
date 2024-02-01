@@ -303,7 +303,43 @@ class CMV:
         
 
     def condition10(self):
-        pass
+        """
+        Check for the existence of a triangle formed by three data points separated by exactly E PTS and F PTS
+        consecutive intervening points. IF the area of the triangle is greater than AREA1 we return True.
+
+        :return: True if such a set of points exists, False otherwise.
+        :rtype: bool
+        """
+        def area_of_triangle(p1, p2, p3):
+            """
+            Calculate the area of a triangle given its vertices.
+
+            :param tuple(float, float) p1: Coordinates of the first vertex as a tuple (x1, y1)
+            :param tuple(float, float) p2: Coordinates of the second vertex as a tuple (x2, y2)
+            :param tuple(float, float) p3: Coordinates of the third vertex as a tuple (x3, y3)
+            :return: The area of the triangle
+            :rtype: float
+            """
+            return abs(0.5 * (p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])))
+
+        if self.NUMPOINTS < 5:
+            return False
+        if 1 > self.E_PTS or 1 > self.F_PTS:
+            return False
+        if self.E_PTS + self.F_PTS > self.NUMPOINTS - 3:
+            return False
+
+        for i in range(self.NUMPOINTS - 2 - self.E_PTS - self.F_PTS):
+            area = area_of_triangle(
+                self.POINTS[i],
+                self.POINTS[i + self.E_PTS + 1],
+                self.POINTS[i + self.E_PTS + self.F_PTS + 2]
+            )
+
+            if area > self.AREA1:
+                return True
+
+        return False
 
     def condition11(self):
         """

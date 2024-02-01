@@ -241,7 +241,57 @@ class TestCMV(unittest.TestCase):
         cmv.K_PTS = 1
         cmv.LENGTH1 = 11.313708498984761
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
-        self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
+
+    def test_condition10(self):
+        """
+            Test the condition10 method of the CMV class.
+
+            This method checks the behavior of the condition10 method under various scenarios:
+            1. An instance where the number of points is too few
+            2. An instance where the E_PTS value is invalid
+            3. An instance where the F_PTS value is invalid
+            4. An instance where both E_PTS and F_PTS are invalid
+            5. An instance where no triangle is greater than AREA1
+            6. An instance where a triangle is greater than AREA1
+        """
+        cmv = self.instantiate_object(os.path.join(os.path.dirname(__file__), "data", "cmv_cond10.in"))
+
+        cmv.POINTS = [(0, 0), (1, 0), (1, 1), (0, 1), (2, 2)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+
+        # Test 1: Function should return False because there are less than 5 points
+        cmv.NUMPOINTS = 4
+        self.assertFalse(cmv.condition10())
+        cmv.NUMPOINTS = len(cmv.POINTS)
+
+        # Test 2: Invalid E_PTS value
+        cmv.E_PTS = 0
+        self.assertFalse(cmv.condition10())
+        cmv.E_PTS = 1
+
+        # Test 3: Invalid F_PTS value
+        cmv.F_PTS = 0
+        self.assertFalse(cmv.condition10())
+        cmv.F_PTS = 1
+
+        # # Test 4: Invalid E_PTS and F_PTS values where they are greater than NUMPOINTS
+        cmv.E_PTS = 6
+        cmv.F_PTS = 6
+        self.assertFalse(cmv.condition10())
+        cmv.E_PTS = 1
+        cmv.F_PTS = 1
+
+        # # Test 5: No Triangle is greater than AREA1
+        cmv.AREA1 = 10
+        self.assertFalse(cmv.condition10())
+        cmv.AREA1 = 0.5
+
+        # Test 6: Triangle is greater than AREA1
+        cmv.POINTS = [(0, 0), (3, 0), (1, 2), (4, 4), (6, 6), (8, 8), (8, 8)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        cmv.E_PTS = 1
+        cmv.F_PTS = 1
+        self.assertTrue(cmv.condition10())
 
     def test_condition8(self):
         """Test cases for condition 8.
@@ -400,3 +450,7 @@ class TestCMV(unittest.TestCase):
 
         cmv.NUMPOINTS = 2
         self.assertFalse(cmv.condition12())
+
+        
+if __name__ == '__main__':
+    unittest.main()
