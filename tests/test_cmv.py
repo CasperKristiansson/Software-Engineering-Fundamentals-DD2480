@@ -35,7 +35,7 @@ class TestCMV(unittest.TestCase):
         self.assertIs(_determine_quadrant((-1, 1)), 2)
         self.assertIs(_determine_quadrant((-1, 1)), 2)
         self.assertIs(_determine_quadrant((-0.1, 2.4)), 2)
-
+        
         self.assertIs(_determine_quadrant((0, -1)), 3)
         self.assertIs(_determine_quadrant((-1, -1)), 3)
         self.assertIs(_determine_quadrant((-6.3, -3.4)), 3)
@@ -57,8 +57,28 @@ class TestCMV(unittest.TestCase):
         self.assertTrue(_check_tripoint_radius((3, 4), (2, 1), (5, 2), 2.0))
         self.assertTrue(_check_tripoint_radius((0, 1), (0, 0), (1, 0), 2.0))
         self.assertTrue(_check_tripoint_radius((0, 1), (0, 0), (1, 0), math.sqrt(2)))
+    
+    def test_condition0(self):
+        filename = "cmv_cond0.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        cmv.POINTS = [(0,0),(1,1)]
+        cmv.NUMPOINTS = 2
+        cmv.LENGTH1 = 1
+        self.assertTrue(cmv.condition0())
+        cmv.LENGTH1 = 2
+        self.assertFalse(cmv.condition0())
+        cmv.POINTS = [(-1,-1),(2,-2)]
+        cmv.LENGTH1 = 1
+        self.assertTrue(cmv.condition0())
+        cmv.POINTS = []
+        cmv.NUMPOINTS = 0
+        cmv.LENGTH1 = 0
+        self.assertFalse(cmv.condition0())
+        cmv.POINTS = [(0,0),(0,0)]
+        cmv.NUMPOINTS = 2
+        self.assertFalse(cmv.condition0())
 
-
+        
     def test_condition3(self):
         """
             Test the condition3 method of the CMV class.
@@ -220,6 +240,7 @@ class TestCMV(unittest.TestCase):
         cmv.NUMPOINTS = 4
         cmv.K_PTS = 1
         cmv.LENGTH1 = 11.313708498984761
+        self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
 
     def test_condition8(self):

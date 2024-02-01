@@ -91,7 +91,22 @@ class CMV:
         ]
     
     def condition0(self):
-        pass
+        """
+        Check if any consecutive points are further apart than LENGTH1
+
+        Parameters:
+        - POINTS (list): List of points (x,y) that make up the curve.
+
+        Returns:
+        - bool: True if any consecutive points are further apart than LENGTH1, False otherwise.
+        """
+        for i in range(len(self.POINTS)-1):
+            first_point = self.POINTS[i]
+            second_point = self.POINTS[i+1]
+            distance = math.sqrt(math.pow(first_point[0]-second_point[0], 2) + math.pow(first_point[1]-second_point[1], 2))
+            if distance > self.LENGTH1:
+                return True
+        return False
 
     def condition1(self):
         pass
