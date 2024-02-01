@@ -82,3 +82,8 @@ This command instructs Sphinx to build the documentation in PDF format.
 **Andreas**
 - Main repo admin (issues, reviewing, labeling, etc)
 - LIC 4, 5
+
+**Martin**
+- Test suite responsible (create foundation for testing framework and project skeleton, review tests in pull requests)
+- LIC 6, 9, 12
+- Creation of the Preliminary Unlocking Matrix (PUM)
