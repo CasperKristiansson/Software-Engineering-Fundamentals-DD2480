@@ -104,7 +104,13 @@ class CMV:
         return False
 
     def condition5(self):
-        pass
+        for i in range(0, self.NUMPOINTS - 1):
+            x1, _ = self.POINTS[i]
+            x2, _ = self.POINTS[i + 1]
+
+            if x2 < x1:
+                return True
+        return False
 
     def condition6(self):
         """

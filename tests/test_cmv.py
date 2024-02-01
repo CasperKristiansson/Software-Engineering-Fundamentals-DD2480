@@ -98,6 +98,37 @@ class TestCMV(unittest.TestCase):
         cmv.Q_PTS = 5
         cmv.NUMPOINTS = 2
         self.assertFalse(cmv.condition4())
+
+    def test_condition5(self):
+        filename = "cmv_cond5_base.in"
+        filepath = os.path.join(os.path.dirname(__file__), "data", filename)
+        cmv = self.instantiate_object(filepath)
+
+        # Two points, second has smaller X
+        cmv.POINTS = [(2, 1), (1, 1)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertTrue(cmv.condition5(), "Should return true when second X is smaller")
+
+        # Two points, second has larger X
+        cmv.POINTS = cmv.POINTS[::-1]
+        self.assertFalse(cmv.condition5(), "Should return false when second X is larger")
+
+        # Multiple points of equal value with one larger in the middle
+        cmv.POINTS = [(1, 0), (1, 0), (2, 0), (1, 0)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertTrue(cmv.condition5(), "A bigger item surrounded by smaller items should return true")
+
+        # Multiple points of equal value with one smaller in the middle
+        cmv.POINTS = [(2, 0), (2, 0), (1, 0), (2, 0)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertTrue(cmv.condition5(), "A smaller item surrounded by larger items should return true")
+
+        # All points are the same
+        cmv.POINTS = [(2, 0), (2, 0), (2, 0), (2, 0)]
+        cmv.NUMPOINTS = len(cmv.POINTS)
+        self.assertFalse(cmv.condition5(), "A list of points with the same X should return false")
+        
+
     
 
     def test_condition6(self):

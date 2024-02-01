@@ -76,3 +76,9 @@ sphinx-build -b pdf source build/pdf
 ```
 
 This command instructs Sphinx to build the documentation in PDF format.
+
+## Contributions
+
+**Andreas**
+- Main repo admin (issues, reviewing, labeling, etc)
+- LIC 4, 5
