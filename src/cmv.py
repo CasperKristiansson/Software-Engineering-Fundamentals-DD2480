@@ -206,6 +206,13 @@ class CMV:
         return False
 
     def condition5(self):
+        """Check that two consecutive points where the latter X-component is
+        smaller than the first.
+
+        Checks the condition by looking at all pairs until ` NUMPOINTS - 1` and
+        verifying if the latter point has a smaller X-component than the first 
+        point.
+        """
         for i in range(0, self.NUMPOINTS - 1):
             x1, _ = self.POINTS[i]
             x2, _ = self.POINTS[i + 1]
