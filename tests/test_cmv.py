@@ -1,3 +1,4 @@
+from time import sleep
 import unittest
 import sys
 import os
@@ -209,7 +210,6 @@ class TestCMV(unittest.TestCase):
         cmv.LENGTH1 = 11.313708498984761
         self.assertFalse(cmv.condition7(), "The distance need to be greater than LENGTH1, not equal or greater than LENGTH1")
 
-
     def test_condition9(self):
 
         filename="condition9/cmv_cond9_accept.in"
@@ -230,3 +230,52 @@ class TestCMV(unittest.TestCase):
         points0_prev = cmv.POINTS[0]
         cmv.POINTS[0] = cmv.POINTS[2]
         self.assertFalse(cmv.condition9())
+    
+    def test_condition11(self):
+        """
+            Test cases for the condition11 cmv method.
+
+            Test scenarios:
+            1. Assert that a valid input returns True
+            2. Assert that if there is no set of data points, the method returns False
+            3. Assert that False is returned if the difference between X[j] and X[i] is zero
+            4. Assert that the method can handle small differences, down to the 10th decimal
+            5. Assert that the method can handle small differences, down to the 10th decimal
+            6. Assert that False is returned if X[j] is a positive number and X[i] is a negative number
+            7. Assert that True is returned when both X[i] and X[j] are negative and X[j] is less than X[i]
+
+            Parameters:
+            - self: the TestCase object
+
+            Returns:
+            None
+         """
+        #Assert that it returns True when it should
+        filename = "cmv_cond11_accept.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertTrue(cmv.condition11())
+        #Assert that it returns False when it should
+        filename = "cmv_cond11_dec_obvious.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertFalse(cmv.condition11())
+        #Test edge case when diff is zero
+        filename = "cmv_cond11_dec_edge.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertFalse(cmv.condition11())
+        #Test edge case when the 10th decimal makes it less
+        filename = "cmv_cond11_acc_edge.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertTrue(cmv.condition11())
+         #Test edge case when the 10th decimal makes it greater
+        filename = "cmv_cond11_dec_10th_dec_greater.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertFalse(cmv.condition11())
+         #Test edge case when X[i] is a negative number and X[j] is a positive number
+        filename = "cmv_cond11_neg_num.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertFalse(cmv.condition11())
+         #Test edge case when both X[i] and X[j] are negative and X[j] is less than X[i]
+        filename = "cmv_cond11_both_neg.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/condition11/"+filename)
+        self.assertTrue(cmv.condition11())
+

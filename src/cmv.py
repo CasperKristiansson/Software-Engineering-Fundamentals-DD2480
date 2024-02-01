@@ -224,7 +224,26 @@ class CMV:
         pass
 
     def condition11(self):
-        pass
+        """
+        Determine whether there is at least one set of two data points, (X[i], Y[i]) and (X[j], Y[j]), separated by exactly G_PTS
+        consecutive intervening points such that X[j] - X[i] < 0. (where i < j ) The condition is not met when NUMPOINTS < 3.
+
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - True if X[j] - X[i] < 0 and NUMPOINTS > 2
+        - False otherwise
+        """
+        if self.NUMPOINTS < 3:
+            return False
+        for i in range(self.NUMPOINTS - self.G_PTS - 1):
+            (xi, _) = self.POINTS[i]
+            (xj, _) = self.POINTS[i + self.G_PTS + 1]
+
+            if xj - xi < 0:
+                return True
+        return False
 
     def condition12(self):
         pass
