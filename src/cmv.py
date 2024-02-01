@@ -66,6 +66,7 @@ def _check_tripoint_radius(
             math.dist(centroid, b) <= r and \
             math.dist(centroid, c) <= r
 
+
 class CMV:
     def __init__(self, d):
         for k,v in d.items():
@@ -74,21 +75,21 @@ class CMV:
     
     def construct_vector(self):
         return [
-            # self.condition0(),
-            # self.condition1(),
-            # self.condition2(),
-            # self.condition3(),
-            # self.condition4(),
-            # self.condition5(),
-            # self.condition6(),
-            # self.condition7(),
-            # self.condition8(),
-            # self.condition9(),
-            # self.condition10(),
-            # self.condition11(),
-            # self.condition12(),
-            # self.condition13(),
-            # self.condition14(),
+            #self.condition0(),
+            #self.condition1(),
+            #self.condition2(),
+            #self.condition3(),
+            #self.condition4(),
+            #self.condition5(),
+            #self.condition6(),
+            #self.condition7(),
+            #self.condition8(),
+            #self.condition9(),
+            #self.condition10(),
+            #self.condition11(),
+            #self.condition12(),
+            #self.condition13(),
+            #self.condition14(),
         ]
     
     def condition0(self):
@@ -110,8 +111,23 @@ class CMV:
         return False
 
     def condition1(self):
-        pass
+        """
+        Checks if three sequential points if any is outside the radius.
 
+        Parameters:
+        - self: the CMV object
+
+        Returns:
+        - bool: True if any of the three sequential points is outside the radius, False otherwise.
+        """
+        for i in range(len(self.POINTS) - 2):
+            first_point = self.POINTS[i]
+            second_point = self.POINTS[i+1]
+            third_point = self.POINTS[i+2]
+            if not _check_tripoint_radius(first_point, second_point, third_point, self.RADIUS1):
+                return True
+        return False
+    
     def condition2(self):
         """
         Determine whether there exists at least one set of three consecutive data points that are the vertices of a triangle

@@ -46,12 +46,12 @@ class TestCMV(unittest.TestCase):
     def test_check_tripoint_radius(self):
         """Tests `cmv/_check_tripoint_radius` for different types of tripoint
         setups.
-
         It should be able to handle randomly distributed points as well as 
         structured points, like unit vector points on the unit circle.
         """
         self.assertFalse(_check_tripoint_radius((0, 1), (1, 0), (5, 2), 1.0))
         self.assertFalse(_check_tripoint_radius((3, 4), (2, 1), (5, 2), 1.7))
+
 
         self.assertTrue(_check_tripoint_radius((0, 1), (1, 0), (-1, 0), 1.0))
         self.assertTrue(_check_tripoint_radius((3, 4), (2, 1), (5, 2), 2.0))
@@ -78,6 +78,25 @@ class TestCMV(unittest.TestCase):
         cmv.NUMPOINTS = 2
         self.assertFalse(cmv.condition0())
 
+    def test_condition1(self):
+        filename = "cmv_cond1.in"
+        cmv = self.instantiate_object(os.path.dirname(__file__)+"/data/"+filename)
+        cmv.POINTS = [(0,0),(1,1),(2,2)]
+        cmv.NUMPOINTS = 3
+        cmv.RADIUS1 = 1
+        self.assertTrue(cmv.condition1())
+        cmv.RADIUS1 = 3
+        self.assertFalse(cmv.condition1())
+        cmv.POINTS = [(-1,-1),(2,-2),(3,-3)]
+        cmv.RADIUS1 = 1
+        self.assertTrue(cmv.condition1())
+        cmv.POINTS = []
+        cmv.NUMPOINTS = 0
+        cmv.RADIUS1 = 0
+        self.assertFalse(cmv.condition1())
+        cmv.POINTS = [(0,0),(0,0),(0,0)]
+        cmv.NUMPOINTS = 3
+        self.assertFalse(cmv.condition1())
         
     def test_condition2(self):
         filename = "cmv_cond2.in"
